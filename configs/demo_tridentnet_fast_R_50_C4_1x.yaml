@@ -1,0 +1,11 @@
+_BASE_: "Demo-Base-TridentNet-Fast-C4.yaml"
+MODEL:
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  # WEIGHTS: "output/tridentnet_finetune/model_0029999.pth"
+  ROI_HEADS:
+    SCORE_THRESH_TEST: 0.2
+  # RETINANET: not used
+  #   SCORE_THRESH_TEST: 0.0
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 50
