@@ -60,6 +60,7 @@ class Det2(object):
         self.transform_gen = T.ResizeShortestEdge(
             [cfg.INPUT.MIN_SIZE_TEST, cfg.INPUT.MIN_SIZE_TEST], cfg.INPUT.MAX_SIZE_TEST
         )
+        # If not specified, input size into network is min 800 and max 1333
         self.input_format = cfg.INPUT.FORMAT
         assert self.input_format in ["RGB", "BGR"], self.input_format
         print('Model expects images in {} format, but dn worry, this object takes care of that for you, just be init it correctly when you instantiate this object'.format(self.input_format))
@@ -86,6 +87,7 @@ class Det2(object):
             height, width = img.shape[:2]
             image = self.transform_gen.get_transform(img).apply_image(img)
             image = torch.as_tensor(image.astype("float32").transpose(2, 0, 1))
+            # print(image.size())
             inputs.append({"image": image, "height": height, "width": width})
         predictions = self.model(inputs)
         return predictions
@@ -186,13 +188,15 @@ if __name__ == '__main__':
     # imgpath = '/media/dh/HDD1/pp/someShips/4.jpg'
     img = cv2.imread(imgpath)
     # img2 = cv2.resize(img, (200,200))
-    # cv2.imshow('', img)
-    # cv2.waitKey(0)
+    n = 100
     import time
-    tic = time.time()
-    res = det2.detect_get_box_in(img, box_format='ltrb', classes=None, buffer_ratio=0.0)
-    toc = time.time()
-    print('Time taken: {}'.format(toc - tic))
+    dur = 0
+    for _ in range(n):
+        tic = time.time()
+        res = det2.detect_get_box_in(img, box_format='ltrb', classes=None, buffer_ratio=0.0)
+        toc = time.time()
+        dur += toc - tic
+    print('Time taken: {:0.3f}s'.format(dur/n))
 
     cv2.namedWindow('', cv2.WINDOW_NORMAL)
     draw_frame = img.copy()
