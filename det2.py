@@ -1,6 +1,7 @@
+import cv2
 import torch
 import numpy as np
-from tridentnet import add_tridentnet_config
+from .tridentnet import add_tridentnet_config
 from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 from detectron2.modeling import build_model
@@ -64,7 +65,7 @@ class Det2(object):
         self.input_format = cfg.INPUT.FORMAT
         assert self.input_format in ["RGB", "BGR"], self.input_format
         print('Model expects images in {} format, but dn worry, this object takes care of that for you, just be init it correctly when you instantiate this object'.format(self.input_format))
-
+        self.flip_channels = ( bgr == (self.input_format=='RGB') )
         # warm up
         self._detect([np.zeros((10,10,3), dtype=np.uint8)])
         print('Warmed up!')
@@ -81,7 +82,8 @@ class Det2(object):
         inputs = []        
         for img in list_of_imgs:
             # Apply pre-processing to image.
-            if self.input_format == "RGB":
+            # if self.input_format == "RGB":
+            if self.flip_channels:
                 # whether the model expects BGR inputs or RGB
                 img = img[:, :, ::-1]
             height, width = img.shape[:2]
