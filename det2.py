@@ -1,6 +1,9 @@
 import torch
 import numpy as np
-from tridentnet import add_tridentnet_config
+if __name__ == '__main__':
+    from tridentnet import add_tridentnet_config
+else:
+    from .tridentnet import add_tridentnet_config
 from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 from detectron2.modeling import build_model
@@ -14,13 +17,16 @@ def setup(args):
     Create configs and perform basic setups.
     """
     cfg_file = args['config']
+    print('Det2 config file : {}'.format(cfg_file))
     model_weights = args['weights']
     positive_thresh = args['thresh']
     cfg = get_cfg()
     add_tridentnet_config(cfg)
     cfg.merge_from_file(cfg_file)
     # This is the way we set the thresh, and model weights. TODO: take in as params from args
+    print('Det2 threshold : {}'.format(positive_thresh))
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = positive_thresh
+    print('Det2 model loaded from : {}'.format(model_weights))
     cfg.MODEL.WEIGHTS = model_weights
     cfg.freeze()
     # register_coco_instances("Ships", {},"ships-lite.json","")
@@ -37,8 +43,10 @@ def setup(args):
 
 class Det2(object):
     _defaults = {
-        "weights": 'weights/tridentnet_finetune_2/model_0049999.pth',
-        "config": 'configs/demo_tridentnet_fast_R_50_C4_1x.yaml',
+        "weights": 'weights/faster-rcnn/ppmodir_reanchor_lr2e-3_189999steps/model_0169999.pth',
+        "config": 'configs/pp_modir.yaml',
+        # "weights": 'weights/tridentnet_finetune_2/model_0049999.pth',
+        # "config": 'configs/demo_tridentnet_fast_R_50_C4_1x.yaml',
         "classes_path": 'configs/PP_classes.txt',
         "thresh": 0.5,
     }
@@ -184,26 +192,31 @@ class Det2(object):
 if __name__ == '__main__':
     import cv2
     det2 = Det2()
-    imgpath = '/media/dh/HDD1/4K_sea_scenes/DJI_0044_4K_SEA_decoded/DJI_0044_4K_SEA_frame0110.jpg'
+    # imgpath = '/media/dh/HDD1/4K_sea_scenes/DJI_0044_4K_SEA_decoded/DJI_0044_4K_SEA_frame0110.jpg'
+    imgpath = 'test.jpg'
     # imgpath = '/media/dh/HDD1/pp/someShips/4.jpg'
     img = cv2.imread(imgpath)
+    bs = 2
+    imgs = [ img for _ in range(bs) ]
     # img2 = cv2.resize(img, (200,200))
-    n = 100
+    n = 30
     import time
     dur = 0
     for _ in range(n):
-        tic = time.time()
-        res = det2.detect_get_box_in(img, box_format='ltrb', classes=None, buffer_ratio=0.0)
-        toc = time.time()
+        tic = time.perf_counter()
+        dets = det2.detect_get_box_in(imgs, box_format='ltrb', classes=None, buffer_ratio=0.0)[0]
+        toc = time.perf_counter()
         dur += toc - tic
     print('Time taken: {:0.3f}s'.format(dur/n))
 
     cv2.namedWindow('', cv2.WINDOW_NORMAL)
     draw_frame = img.copy()
-    for r in res:
-        bb, score, class_ = r 
+    for det in dets:
+        # print(det)
+        bb, score, class_ = det 
         l,t,r,b = bb
-        cv2.rectangle(draw_frame, (l,t), (r,b), (255,255,0), 2, )
+        cv2.rectangle(draw_frame, (l,t), (r,b), (255,255,0), 1 )
     
-    cv2.imshow('', draw_frame)
-    cv2.waitKey(0)
+    cv2.imwrite('test_out.jpg', draw_frame)
+    # cv2.imshow('', draw_frame)
+    # cv2.waitKey(0)
