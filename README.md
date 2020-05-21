@@ -1,6 +1,22 @@
 
 # Object Container for Detectron2
 
+## Docker
+
+Get docker:`docker pull levan92/cv-suite`
+Use docker: `./run_docker.sh` look into the script to change flags accordingly
+
+## Get weights
+
+```bash
+cd weights
+./get_weights.sh
+```
+
+## Example usage
+
+See `example_image.py` and `example_video.py`
+
 ## Dependencies
 
 - Detectron2:
