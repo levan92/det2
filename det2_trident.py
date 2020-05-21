@@ -1,6 +1,10 @@
 import cv2
 import torch
 import numpy as np
+if __name__ == '__main__':
+    from tridentnet import add_tridentnet_config
+else:
+    from .tridentnet import add_tridentnet_config
 from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 from detectron2.modeling import build_model
@@ -18,6 +22,7 @@ def setup(args):
     model_weights = args['weights']
     positive_thresh = args['thresh']
     cfg = get_cfg()
+    add_tridentnet_config(cfg)
     cfg.merge_from_file(cfg_file)
     # This is the way we set the thresh, and model weights. TODO: take in as params from args
     print('Det2 threshold : {}'.format(positive_thresh))
@@ -39,12 +44,11 @@ def setup(args):
 
 class Det2(object):
     _defaults = {
-        "weights": "weights/faster-rcnn/model_final_280758.pkl",
-        "config": "configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml",
-        "classes_path": 'configs/coco80.names',
-        # "weights": 'weights/faster-rcnn/ppmodir_reanchor_lr2e-3_189999steps/model_0169999.pth',
-        # "config": 'configs/pp_modir.yaml',
-        # "classes_path": 'configs/PP_classes.txt',
+        "weights": 'weights/faster-rcnn/ppmodir_reanchor_lr2e-3_189999steps/model_0169999.pth',
+        "config": 'configs/pp_modir.yaml',
+        # "weights": 'weights/tridentnet_finetune_2/model_0049999.pth',
+        # "config": 'configs/demo_tridentnet_fast_R_50_C4_1x.yaml',
+        "classes_path": 'configs/PP_classes.txt',
         "thresh": 0.5,
     }
 
