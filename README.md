@@ -3,8 +3,8 @@
 
 ## Docker
 
-Get docker:`docker pull levan92/cv-suite`
-Use docker: `./run_docker.sh` look into the script to change flags accordingly
+- Get docker:`docker pull levan92/cv-suite`
+- Use docker: `./run_docker.sh` look into the script to change flags accordingly
 
 ## Get weights
 
