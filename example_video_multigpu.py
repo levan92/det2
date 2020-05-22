@@ -17,7 +17,7 @@ od1 = Det2(bgr=True,
         config= "configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml",
         classes_path= 'configs/coco80.names',
         thresh=args.thresh,
-        cuda_device=0
+        gpu_device='cuda:0'
         )
 
 od2 = Det2(bgr=True, 
@@ -25,7 +25,7 @@ od2 = Det2(bgr=True,
         config= "configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml",
         classes_path= 'configs/coco80.names',
         thresh=args.thresh,
-        cuda_device=None
+        gpu_device='cpu'
         )
 
 if args.video_path.isdigit():

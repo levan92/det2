@@ -50,7 +50,12 @@ class Det2(object):
         "thresh": 0.5,
     }
 
-    def __init__(self, bgr=True, cuda_device=0, **kwargs):
+    def __init__(self, bgr=True, gpu_device='cuda:0', **kwargs):
+        '''
+        Params
+        ------
+        - gpu_device : str, "cpu" or "cuda:0" or "cuda:1"
+        '''
         self.__dict__.update(self._defaults)
         # for portability between keras-yolo3/yolo.py and this
         if 'model_path' in kwargs:
@@ -58,12 +63,11 @@ class Det2(object):
         if 'score' in kwargs:
             kwargs['thresh'] = kwargs['score']
         self.__dict__.update(kwargs)
-
-        if cuda_device is None:
-            self.device = "cpu"
-        else:
-            self.device = "cuda:{}".format(cuda_device)
-
+        # if cuda_device is None:
+        #     self.device = "cpu"
+        # else:
+        #     self.device = "cuda:{}".format(cuda_device)
+        self.device = gpu_device
         cfg, self.class_names = setup(self.__dict__)
         self.cfg = cfg.clone()  # cfg can be modified by model
         self.model = build_model(self.cfg)
