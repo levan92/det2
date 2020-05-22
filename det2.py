@@ -39,7 +39,7 @@ def setup(args):
 
 class Det2(object):
     _defaults = {
-        "weights": "weights/faster-rcnn/model_final_280758.pkl",
+        "weights": "weights/faster-rcnn/faster_rcnn_R_50_FPN_3x/model_final_280758.pkl",
         "config": "configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml",
         "classes_path": 'configs/coco80.names',
         # "weights": 'weights/faster-rcnn/ppmodir_reanchor_lr2e-3_189999steps/model_0169999.pth',
