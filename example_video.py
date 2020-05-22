@@ -13,7 +13,7 @@ args = parser.parse_args()
 assert args.thresh > 0.0
 
 od = Det2(bgr=True, 
-        weights= "weights/faster-rcnn/model_final_280758.pkl",
+        weights= "weights/faster-rcnn/faster_rcnn_R_50_FPN_3x/model_final_280758.pkl",
         config= "configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml",
         classes_path= 'configs/coco80.names',
         thresh=args.thresh,

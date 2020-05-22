@@ -1,3 +1,4 @@
+import os
 import cv2
 import torch
 import numpy as np
@@ -24,6 +25,7 @@ def setup(args):
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = positive_thresh
     print('Det2 model loaded from : {}'.format(model_weights))
     cfg.MODEL.WEIGHTS = model_weights
+    cfg.MODEL.DEVICE=args['device']
     cfg.freeze()
     # register_coco_instances("Ships", {},"ships-lite.json","")
     # register_coco_instances("Ships", {},"ships-lite.json","Ships")
@@ -48,7 +50,7 @@ class Det2(object):
         "thresh": 0.5,
     }
 
-    def __init__(self, bgr=True, **kwargs):
+    def __init__(self, bgr=True, cuda_device=0, **kwargs):
         self.__dict__.update(self._defaults)
         # for portability between keras-yolo3/yolo.py and this
         if 'model_path' in kwargs:
@@ -56,6 +58,12 @@ class Det2(object):
         if 'score' in kwargs:
             kwargs['thresh'] = kwargs['score']
         self.__dict__.update(kwargs)
+
+        if cuda_device is None:
+            self.device = "cpu"
+        else:
+            self.device = "cuda:{}".format(cuda_device)
+
         cfg, self.class_names = setup(self.__dict__)
         self.cfg = cfg.clone()  # cfg can be modified by model
         self.model = build_model(self.cfg)
