@@ -2,6 +2,8 @@ import os
 import cv2
 import torch
 import numpy as np
+from pprint import pprint
+
 from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
 from detectron2.modeling import build_model
@@ -9,6 +11,11 @@ from detectron2.modeling import build_model
 import detectron2.data.transforms as T
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.data.datasets import register_coco_instances
+
+def batch(iterable, bs=1):
+    l = len(iterable)
+    for ndx in range(0, l, bs):
+        yield iterable[ndx:min(ndx + bs, l)]
 
 def setup(args):
     """
@@ -48,6 +55,7 @@ class Det2(object):
         # "config": 'configs/pp_modir.yaml',
         # "classes_path": 'configs/PP_classes.txt',
         "thresh": 0.5,
+        "max_batch_size": 8, #typical est for laptop grade gpu
     }
 
     def __init__(self, bgr=True, gpu_device='cuda:0', **kwargs):
@@ -63,6 +71,7 @@ class Det2(object):
         if 'score' in kwargs:
             kwargs['thresh'] = kwargs['score']
         self.__dict__.update(kwargs)
+        pprint(self.__dict__)
         # if cuda_device is None:
         #     self.device = "cpu"
         # else:
@@ -191,8 +200,15 @@ class Det2(object):
             images = [ images ]
             single = True
 
-        res = self._detect(images)
-        all_dets = self._postprocess(res, box_format=box_format, wanted_classes=classes, buffer_ratio=buffer_ratio)
+        all_dets = []
+        for this_batch in batch(images, bs=self.max_batch_size):
+            res = self._detect(this_batch)
+            dets = self._postprocess(res, box_format=box_format, wanted_classes=classes, buffer_ratio=buffer_ratio)
+
+            if len(all_dets) > 0:
+                all_dets.extend(dets)
+            else:
+                all_dets = dets
 
         if single:
             return all_dets[0]
@@ -201,12 +217,14 @@ class Det2(object):
 
 if __name__ == '__main__':
     import cv2
-    det2 = Det2()
+    det2 = Det2( 
+            max_batch_size=8
+            )
     # imgpath = '/media/dh/HDD1/4K_sea_scenes/DJI_0044_4K_SEA_decoded/DJI_0044_4K_SEA_frame0110.jpg'
     imgpath = 'test.jpg'
     # imgpath = '/media/dh/HDD1/pp/someShips/4.jpg'
     img = cv2.imread(imgpath)
-    bs = 2
+    bs = 20
     imgs = [ img for _ in range(bs) ]
     # img2 = cv2.resize(img, (200,200))
     n = 30
