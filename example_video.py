@@ -8,6 +8,11 @@ from det2 import Det2
 parser = argparse.ArgumentParser()
 parser.add_argument('video_path', help='path to video')
 parser.add_argument('--thresh', help='OD confidence threshold', default=0.4, type=float)
+parser.add_argument('--out', help='flag to output video', action='store_true')
+parser.add_argument('--outpath', help='path to output video', default='out.mp4', type=str)
+
+parser.add_argument('--nodisplay', help='flag to not display', action='store_true')
+
 args = parser.parse_args()
 
 assert args.thresh > 0.0
@@ -28,7 +33,17 @@ else:
 cap = cv2.VideoCapture(vp)
 assert cap.isOpened(),'Cannot open video file {}'.format(vp)
 
-cv2.namedWindow('Faster-RCNN FPN', cv2.WINDOW_NORMAL)
+if args.out:
+    outpath = args.outpath
+    fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
+    frameSize = int(cap.get(3)), int(cap.get(4))
+    fps = int(cap.get(5))
+    out_vid = cv2.VideoWriter(outpath, fourcc, int(fps), frameSize)
+else:
+    out_vid = None
+
+if not args.nodisplay:
+    cv2.namedWindow('Faster-RCNN FPN', cv2.WINDOW_NORMAL)
 
 while True:
     # Decode
@@ -37,7 +52,7 @@ while True:
         break
     # Inference
     tic = time.perf_counter()
-    dets = od.detect_get_box_in([frame], box_format='ltrb')
+    dets = od.detect_get_box_in([frame], box_format='ltrb', classes=['person'])
     toc = time.perf_counter()
     print('infer duration: {:0.3f}s'.format(toc-tic))
     dets = dets[0]
@@ -50,10 +65,14 @@ while True:
         cv2.rectangle(show_frame, (int(l),int(t)),(int(r),int(b)), (255,255,0))
         cv2.putText(show_frame, '{}:{:0.2f}'.format(clsname, conf), (l,b), cv2.FONT_HERSHEY_DUPLEX, fontScale=1, color=(255,255,0), lineType=2)
 
-    cv2.imshow('Faster-RCNN FPN', show_frame)
-    if cv2.waitKey(1) == ord('q'):
-        break
+    if not args.nodisplay:
+        cv2.imshow('Faster-RCNN FPN', show_frame)
+        if cv2.waitKey(1) == ord('q'):
+            break
+    if out_vid:
+        out_vid.write(show_frame)
 
 cv2.destroyAllWindows()
+out_vid.release()
 
  
