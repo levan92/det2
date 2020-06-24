@@ -1,5 +1,6 @@
 import os
 import cv2
+import time
 import torch
 import numpy as np
 from pprint import pprint
@@ -79,6 +80,7 @@ class Det2(object):
         self.device = gpu_device
         cfg, self.class_names = setup(self.__dict__)
         self.cfg = cfg.clone()  # cfg can be modified by model
+        print(self.cfg)
         self.model = build_model(self.cfg)
         self.model.eval()
         checkpointer = DetectionCheckpointer(self.model)
@@ -116,7 +118,11 @@ class Det2(object):
             image = torch.as_tensor(image.astype("float32").transpose(2, 0, 1))
             # print(image.size())
             inputs.append({"image": image, "height": height, "width": width})
+        
+        tic = time.perf_counter()
         predictions = self.model(inputs)
+        toc = time.perf_counter()
+        print('Forward pass: {:0.04f}s'.format(toc - tic))
         return predictions
 
     def _postprocess(self, preds, box_format='ltrb', wanted_classes=None, buffer_ratio=0.0):
@@ -224,11 +230,10 @@ if __name__ == '__main__':
     imgpath = 'test.jpg'
     # imgpath = '/media/dh/HDD1/pp/someShips/4.jpg'
     img = cv2.imread(imgpath)
-    bs = 20
+    bs = 8
     imgs = [ img for _ in range(bs) ]
     # img2 = cv2.resize(img, (200,200))
-    n = 30
-    import time
+    n = 20
     dur = 0
     for _ in range(n):
         tic = time.perf_counter()
