@@ -3,7 +3,7 @@
 
 ## Docker
 
-- Get docker:`docker pull levan92/det2` OR Build your own docker from `Dockerfile`, you will need the tensorrt installation deb file: https://drive.google.com/file/d/10NT4GYOAOjrwdSGPJS6v6uyVtduW-Pa3/view?usp=sharing
+- Get docker:`docker pull levan92/det2` OR Build your own docker from `Dockerfile`, you will need the tensorrt installation [deb file](https://drive.google.com/file/d/10NT4GYOAOjrwdSGPJS6v6uyVtduW-Pa3/view?usp=sharing)
 - Use docker: `./run_docker.sh` look into the script to change paths accordingly
 
 ## Get weights
