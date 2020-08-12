@@ -17,7 +17,7 @@ cd weights
 
 See `example_image.py` and `example_video.py`
 
-## Dependencies
+## Dependencies (IF NOT USING DOCKER)
 
 - Detectron2:
 
