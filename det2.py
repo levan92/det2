@@ -122,7 +122,7 @@ class Det2(object):
         tic = time.perf_counter()
         predictions = self.model(inputs)
         toc = time.perf_counter()
-        print('Forward pass: {:0.04f}s'.format(toc - tic))
+        # print('Forward pass: {:0.04f}s'.format(toc - tic))
         return predictions
 
     def _postprocess(self, preds, box_format='ltrb', wanted_classes=None, buffer_ratio=0.0):
