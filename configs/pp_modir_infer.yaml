@@ -32,9 +32,10 @@ INPUT:
         TYPE: "relative_range"
         SIZE: [0.5, 1.0]
     # Size of the smallest side of the image during testing. Set to zero to disable resize in testing.
-    MIN_SIZE_TEST: 0
-    # MIN_SIZE_TEST: 750
+    MIN_SIZE_TEST: 800
+    # MIN_SIZE_TEST: 0
     # Maximum size of the side of the image during testing
-    MAX_SIZE_TEST: 4096 # DCI 4K res 
+    MAX_SIZE_TEST: 1333 
+    # MAX_SIZE_TEST: 4096 # DCI 4K res 
 TEST:
     EVAL_PERIOD: 6000
