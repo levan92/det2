@@ -1,0 +1,15 @@
+_BASE_: "../Base-RCNN-FPN.yaml"
+MODEL:
+    WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+    MASK_ON: False
+    RESNETS:
+        DEPTH: 50
+SOLVER:
+    STEPS: (210000, 250000)
+    MAX_ITER: 270000
+INPUT:
+    # Size of the smallest side of the image during testing. Set to zero to disable resize in testing.
+    MIN_SIZE_TEST: 0
+    # MIN_SIZE_TEST: 750
+    # Maximum size of the side of the image during testing
+    MAX_SIZE_TEST: 4096 # DCI 4K res 
