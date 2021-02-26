@@ -11,6 +11,13 @@ from detectron2.modeling import build_model
 import detectron2.data.transforms as T
 from detectron2.checkpoint import DetectionCheckpointer
 
+if __name__ == '__main__':
+    import models
+    from config import add_IN_config
+else:
+    from . import models
+    from .config import add_IN_config
+
 def batch(iterable, bs=1):
     l = len(iterable)
     for ndx in range(0, l, bs):
@@ -25,6 +32,7 @@ def setup(args):
     model_weights = args['weights']
     positive_thresh = args['thresh']
     cfg = get_cfg()
+    add_IN_config(cfg)
     cfg.merge_from_file(cfg_file)
     # This is the way we set the thresh, and model weights. TODO: take in as params from args
     print('Det2 threshold : {}'.format(positive_thresh))
@@ -71,10 +79,6 @@ class Det2(object):
             kwargs['thresh'] = kwargs['score']
         self.__dict__.update(kwargs)
         pprint(self.__dict__)
-        # if cuda_device is None:
-        #     self.device = "cpu"
-        # else:
-        #     self.device = "cuda:{}".format(cuda_device)
         self.device = gpu_device
         cfg, self.class_names = setup(self.__dict__)
         self.cfg = cfg.clone()  # cfg can be modified by model
@@ -221,9 +225,18 @@ class Det2(object):
 
 if __name__ == '__main__':
     import cv2
+    # det2 = Det2( 
+    #         max_batch_size=8
+    #         )
+
+    # with IN
     det2 = Det2( 
-            max_batch_size=8
+        weights="/media/dh/HDD/pp/detectron2_outputs/ppmodir_withIN/model_0009999.pth",
+        config="configs/pp_modir_withIN.yaml",
+        classes_path='/media/dh/HDD/pp/detectron2_outputs/ppmodir_withIN/PP_classes.txt',
+        max_batch_size=8
             )
+
     # imgpath = '/media/dh/HDD1/4K_sea_scenes/DJI_0044_4K_SEA_decoded/DJI_0044_4K_SEA_frame0110.jpg'
     imgpath = 'test.jpg'
     # imgpath = '/media/dh/HDD1/pp/someShips/4.jpg'
