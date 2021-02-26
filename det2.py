@@ -1,17 +1,15 @@
 import os
-import cv2
 import time
+
+import cv2
 import torch
 import numpy as np
 from pprint import pprint
 
 from detectron2.config import get_cfg
-from detectron2.data import MetadataCatalog
 from detectron2.modeling import build_model
-# from detectron2.engine.defaults import DefaultPredictor
 import detectron2.data.transforms as T
 from detectron2.checkpoint import DetectionCheckpointer
-from detectron2.data.datasets import register_coco_instances
 
 def batch(iterable, bs=1):
     l = len(iterable)
