@@ -1,5 +1,5 @@
 
-# Object Container for Detectron2
+# Inference wrapper for Detectron2
 
 ## Docker
 
