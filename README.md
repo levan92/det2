@@ -17,6 +17,13 @@ cd weights
 
 See `example_image.py` and `example_video.py`
 
+## Installation
+
+```bash
+./install_detectron2_dep.sh
+pip3 install -e <path to det2>
+```
+
 ## Dependencies (IF NOT USING DOCKER)
 
 - Detectron2:
