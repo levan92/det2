@@ -11,10 +11,11 @@ from detectron2.modeling import build_model
 import detectron2.data.transforms as T
 from detectron2.checkpoint import DetectionCheckpointer
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+try:
     import models
     from config import add_IN_config
-else:
+except ImportError:
     from . import models
     from .config import add_IN_config
 
