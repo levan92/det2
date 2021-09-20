@@ -25,6 +25,8 @@ cd detectron2 && python3 -m pip install -e .
 cd det2 && pip3 install .
 ```
 
+- Or, download `.whl` file in this repo's [releases](https://github.com/levan92/det2/releases/latest)
+
 ## Docker
 
 - Get docker:`docker pull levan92/det2` OR Build your own docker from `Dockerfile`, you will need the tensorrt installation [deb file](https://drive.google.com/file/d/10NT4GYOAOjrwdSGPJS6v6uyVtduW-Pa3/view?usp=sharing)
