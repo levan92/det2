@@ -39,4 +39,4 @@ cd weights
 
 ## Example usage
 
-See `example_image.py` and `example_video.py`
+See files in [example_scripts/](./example_scripts/).
