@@ -3,7 +3,7 @@ import time
 import argparse
 from pathlib import Path
 
-from det2.det2 import Det2
+from det2 import Det2
 
 parser = argparse.ArgumentParser()
 parser.add_argument('video_path', help='path to video')

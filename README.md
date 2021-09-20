@@ -1,29 +1,5 @@
+
 # Inference wrapper for Detectron2
-
-## Dependencies
-
-- detectron2:
-
-```bash
-./install_detectron2_dep.sh && python3 -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
-# (add --user if you don't have permission)
-
-# Or, to install it from a local clone:
-git clone https://github.com/facebookresearch/detectron2.git
-cd detectron2 && python3 -m pip install -e .
-
-# Or if you are on macOS
-# CC=clang CXX=clang++ python -m pip install -e .
-```
-- cv2
-
-## Installation
-
-- In the main project folder, install `det2` as a python package using `pip` or as an editable package if you like (`-e` flag after `pip`)
-
-```bash
-cd deep_sort_realtime && pip3 install .
-```
 
 ## Docker
 
@@ -40,3 +16,26 @@ cd weights
 ## Example usage
 
 See `example_image.py` and `example_video.py`
+
+## Installation
+
+```bash
+./install_detectron2_dep.sh
+pip3 install -e <path to det2>
+```
+
+## Dependencies (IF NOT USING DOCKER)
+
+- Detectron2:
+
+```bash
+python3 -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
+# (add --user if you don't have permission)
+
+# Or, to install it from a local clone:
+git clone https://github.com/facebookresearch/detectron2.git
+cd detectron2 && python3 -m pip install -e .
+
+# Or if you are on macOS
+# CC=clang CXX=clang++ python -m pip install -e .
+```
