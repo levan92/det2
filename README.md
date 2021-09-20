@@ -22,7 +22,7 @@ cd detectron2 && python3 -m pip install -e .
 - In the main project folder, install `det2` as a python package using `pip` or as an editable package if you like (`-e` flag after `pip`)
 
 ```bash
-cd deep_sort_realtime && pip3 install .
+cd det2 && pip3 install .
 ```
 
 ## Docker
