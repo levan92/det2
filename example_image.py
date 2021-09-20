@@ -1,11 +1,9 @@
-import logging
-
 import cv2
 import time
 import argparse
 from pathlib import Path
 
-from det2.det2 import Det2
+from det2 import Det2
 
 parser = argparse.ArgumentParser()
 parser.add_argument('image_path', help='path to image or folder of images')
