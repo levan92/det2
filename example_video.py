@@ -3,7 +3,7 @@ import time
 import argparse
 from pathlib import Path
 
-from det2 import Det2
+from det2.det2 import Det2
 
 parser = argparse.ArgumentParser()
 parser.add_argument('video_path', help='path to video')
@@ -52,7 +52,7 @@ while True:
         break
     # Inference
     tic = time.perf_counter()
-    dets = od.detect_get_box_in([frame], box_format='ltrb', classes=['person'])
+    dets = od.detect_get_box_in([frame], box_format='ltrb', classes=None)
     toc = time.perf_counter()
     print('infer duration: {:0.3f}s'.format(toc-tic))
     dets = dets[0]
@@ -73,6 +73,5 @@ while True:
         out_vid.write(show_frame)
 
 cv2.destroyAllWindows()
-out_vid.release()
-
- 
+if out_vid:
+    out_vid.release()
