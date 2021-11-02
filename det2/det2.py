@@ -9,6 +9,7 @@ import detectron2.data.transforms as T
 from detectron2.checkpoint import DetectionCheckpointer
 
 from det2.config import add_IN_config
+from det2.models import resnet_IN, resnet_IN_fpn
 
 log_level = logging.INFO
 logger = logging.getLogger('det2')
