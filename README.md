@@ -1,4 +1,4 @@
-# Inference wrapper for Detectron2
+# Inference wrapper for [Detectron2](https://github.com/facebookresearch/detectron2)
 
 ## Dependencies
 
